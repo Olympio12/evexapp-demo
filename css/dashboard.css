@@ -1,0 +1,210 @@
+/* ===== DASHBOARD PAGE ===== */
+
+/* Search & Filter Bar */
+.filter-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.search-input {
+  width: 100%;
+  padding: 9px 13px 9px 36px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--text);
+  transition: border-color .15s;
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--bca-blue);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0,87,168,.08);
+}
+
+.filter-select {
+  padding: 9px 32px 9px 13px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: var(--font-body);
+  color: var(--text-mid);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238a94a6' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.filter-select:focus { outline: none; border-color: var(--bca-blue); }
+
+.filter-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+}
+.results-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Vehicle Table */
+.vehicle-table-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.vehicle-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.vehicle-table thead tr {
+  background: var(--navy);
+}
+.vehicle-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
+}
+.vehicle-table th:first-child { color: rgba(255,255,255,.3); }
+.vehicle-table th.sortable { cursor: pointer; user-select: none; }
+.vehicle-table th.sortable:hover { color: rgba(255,255,255,.9); }
+
+.vehicle-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .12s;
+  cursor: pointer;
+}
+.vehicle-table tbody tr:last-child { border-bottom: none; }
+.vehicle-table tbody tr:hover { background: var(--ice-soft); }
+.vehicle-table tbody tr.locked { background: var(--status-active-bg) !important; }
+.vehicle-table tbody tr.locked:hover { background: #fff0cc !important; }
+
+.vehicle-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text);
+  vertical-align: middle;
+}
+.td-num { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.td-immat {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: .5px;
+}
+.td-vin { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.td-brand { font-weight: 600; }
+.td-actions { text-align: right; }
+
+.row-status-bar {
+  width: 4px;
+  padding: 0 !important;
+}
+.row-status-bar div {
+  width: 4px;
+  min-height: 52px;
+  border-radius: 2px;
+}
+.rsb-none   { background: var(--status-none); }
+.rsb-active { background: var(--status-active); }
+.rsb-grele  { background: var(--status-grele); }
+.rsb-non    { background: var(--status-non); }
+
+/* Empty state */
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: 16px; opacity: .4; }
+.empty-state-text { font-size: 14px; }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--white);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.page-info { font-size: 12px; color: var(--text-muted); }
+.page-btns { display: flex; gap: 4px; }
+.page-btn {
+  width: 30px; height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  background: none;
+  color: var(--text-mid);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .12s;
+}
+.page-btn:hover { background: var(--ice-soft); }
+.page-btn.active { background: var(--bca-blue); color: white; border-color: var(--bca-blue); }
+.page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Status legend */
+.status-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-mid);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background .12s;
+}
+.legend-item:hover { background: var(--bg); }
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.ld-none   { background: var(--status-none); }
+.ld-active { background: var(--status-active); }
+.ld-grele  { background: var(--status-grele); }
+.ld-non    { background: var(--status-non); }

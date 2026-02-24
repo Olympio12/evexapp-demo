@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EVEXApp - Admin</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-brand">BCA Expertise</div>
+      <div class="logo-app">EVEX</div>
+    </div>
+    <div class="sidebar-event">
+      <div class="ev-label">Événement actif</div>
+      <div class="ev-code">5G1</div>
+      <div class="ev-name">Grêle Anglet : Juin 2025</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Navigation</div>
+      <div class="nav-item" data-nav="dashboard" onclick="window.location.href='dashboard.html'">
+        Parc de véhicules
+      </div>
+      <div class="nav-item active" data-nav="admin">
+        Administration
+      </div>
+      <div class="nav-section">Gestion</div>
+      <div class="nav-item">
+        <span class="nav-icon">📂</span>
+        EVEX
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">👥</span>
+        Utilisateurs
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📤</span>
+        Exports
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar">?</div>
+      <div class="user-info">
+        <div class="user-name">—</div>
+        <div class="user-role">—</div>
+      </div>
+      <button class="user-logout" title="Déconnexion">⇥</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">Administration — Événement 5G1</div>
+      <button class="btn btn-secondary btn-sm" onclick="window.location.href='dashboard.html'">
+        🚗 Voir le parc
+      </button>
+      <button class="btn btn-primary" onclick="exportRapport()">
+        📤 Exporter le rapport
+      </button>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card s-none">
+          <div class="stat-label">Total véhicules</div>
+          <div class="stat-value" data-stat="total">—</div>
+          <div class="stat-sub">dans le parc</div>
+        </div>
+        <div class="stat-card s-active">
+          <div class="stat-label">En cours</div>
+          <div class="stat-value" data-stat="active">—</div>
+          <div class="stat-sub">expertises actives</div>
+        </div>
+        <div class="stat-card s-grele">
+          <div class="stat-label">Traités (total)</div>
+          <div class="stat-value" data-stat="done">—</div>
+          <div class="stat-sub">clôturés</div>
+        </div>
+        <div class="stat-card s-non">
+          <div class="stat-label">Non vus</div>
+          <div class="stat-value" data-stat="none">—</div>
+          <div class="stat-sub">en attente</div>
+        </div>
+      </div>
+
+      <!-- Progress Overview -->
+      <div class="progress-overview">
+        <div class="po-header">
+          <span class="po-title">Progression de l'événement : Grêle Anglet Juin 2025</span>
+          <span class="po-pct">0%</span>
+        </div>
+        <div class="po-bar-wrap">
+          <div class="po-bar-fill" style="width:0%"></div>
+        </div>
+        <div class="po-stats">
+          <div class="po-stat">
+            <div class="po-dot" style="background:var(--status-none)"></div>
+            <span data-stat="none">—</span> pas encore vus
+          </div>
+          <div class="po-stat">
+            <div class="po-dot" style="background:var(--status-active)"></div>
+            <span data-stat="active">—</span> en cours
+          </div>
+          <div class="po-stat">
+            <div class="po-dot" style="background:var(--status-grele)"></div>
+            <span data-stat="grele">—</span> grêlés
+          </div>
+          <div class="po-stat">
+            <div class="po-dot" style="background:var(--status-non)"></div>
+            <span data-stat="non">—</span> non grêlés
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Grid -->
+      <div class="admin-grid">
+
+        <!-- Left: Expert activity + Code builder -->
+        <div>
+          <!-- Expert Activity Table -->
+          <div class="card mb-24">
+            <div class="card-header">
+              <span style="font-size:18px">👥</span>
+              <div class="card-title">Activité des experts</div>
+              <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">🔄 Temps réel (30s)</span>
+            </div>
+            <div class="card-body" style="padding:0">
+              <table class="expert-table">
+                <thead>
+                  <tr>
+                    <th>Expert</th>
+                    <th>Statut</th>
+                    <th>Véhicule en cours</th>
+                    <th>Traités</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="expert-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Import Zone -->
+          <div class="card">
+            <div class="card-header">
+              <span style="font-size:18px">📂</span>
+              <div class="card-title">Import du fichier Parc</div>
+            </div>
+            <div class="card-body">
+              <div class="import-zone">
+                <div class="import-icon">📄</div>
+                <div class="import-text">Glisser-déposer votre fichier ou cliquer</div>
+                <div class="import-sub">Formats acceptés : CSV, Excel (.xlsx, .xls)</div>
+              </div>
+              <p style="margin-top:12px;font-size:11px;color:var(--text-muted);text-align:center">
+                Les données actuelles correspondent au fichier <strong>SLAVI_ANGLET.xlsx</strong> (15 véhicules)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Code builder + Activity log -->
+        <div>
+          <!-- Code EVEX Builder -->
+          <div class="code-builder mb-24">
+            <div class="code-builder-title">Générateur de code EVEX</div>
+
+            <div class="code-display"><span>5</span>G<span>1</span></div>
+            <div class="code-description">Grêle 2025 — 1ère occurrence</div>
+
+            <div class="code-inputs">
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block">Année</label>
+                <select id="code-year">
+                  <option value="5" selected>2025</option>
+                  <option value="4">2024</option>
+                  <option value="6">2026</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block">Type</label>
+                <select id="code-type">
+                  <option value="G" selected>G : Grêle</option>
+                  <option value="I">I : Inondation</option>
+                  <option value="T">T : Tempête</option>
+                  <option value="V">V : Vandalisme</option>
+                  <option value="F">F : Incendie</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block">Occurrence</label>
+                <input type="number" id="code-occ" value="1" min="1" max="9">
+              </div>
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;display:block">Nb véhicules</label>
+                <input type="number" id="code-count" value="15" min="1">
+              </div>
+            </div>
+
+            <div class="catnat-warning" style="display:none">
+              ⚠ Moins de 10 véhicules — Code CATNAT permanent appliqué
+            </div>
+
+            <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="TOAST.show('✅ Code EVEX créé et enregistré', 'success')">
+              Créer l'événement
+            </button>
+          </div>
+
+          <!-- Activity Log -->
+          <div class="card">
+            <div class="card-header">
+              <span style="font-size:18px">📋</span>
+              <div class="card-title">Journal d'activité</div>
+            </div>
+            <div class="card-body">
+              <div class="activity-log"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /admin-grid -->
+
+      <!-- Export Section -->
+      <div class="card mt-24">
+        <div class="card-header">
+          <span style="font-size:18px">📤</span>
+          <div class="card-title">Export & Transmission du rapport</div>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+            <div style="background:var(--bg);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)">
+              <div style="font-size:11px;font-weight:700;color:var(--bca-blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Onglet REP</div>
+              <p style="font-size:12px;color:var(--text-mid);margin-bottom:12px">Données complètes d'expertise par véhicule, avec formules de calcul.</p>
+              <button class="btn btn-secondary btn-sm" onclick="TOAST.show('📊 Onglet REP généré', 'success')">
+                📊 Générer REP
+              </button>
+            </div>
+            <div style="background:var(--navy);border-radius:var(--radius-sm);padding:16px">
+              <div style="font-size:11px;font-weight:700;color:var(--blue-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Rapport complet</div>
+              <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px">Fichier Excel complet REP prêt à transmettre à l'émetteur.</p>
+              <button class="btn btn-primary btn-sm" onclick="exportRapport()">
+                📤 Exporter & Transmettre
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

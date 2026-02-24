@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EVEX — BCA Expertise · Formulaire REP</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/rep.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-brand">BCA Expertise</div>
+      <div class="logo-app">EVEX</div>
+      <div class="logo-sub">Événements Exceptionnels</div>
+    </div>
+    <div class="sidebar-event">
+      <div class="ev-label">Événement actif</div>
+      <div class="ev-code">5G1</div>
+      <div class="ev-name">Grêle Anglet — Juin 2025</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Navigation</div>
+      <div class="nav-item" data-nav="dashboard" onclick="window.location.href='dashboard.html'">
+        <span class="nav-icon">🚗</span>
+        Parc de véhicules
+      </div>
+      <div class="nav-item admin-only" style="display:none" data-nav="admin" onclick="window.location.href='admin.html'">
+        <span class="nav-icon">📊</span>
+        Administration
+      </div>
+      <div class="nav-section">Dossier actif</div>
+      <div class="nav-item active" data-nav="rep">
+        <span class="nav-icon">📝</span>
+        Formulaire REP
+      </div>
+    </nav>
+    <div class="sidebar-user">
+      <div class="user-avatar">?</div>
+      <div class="user-info">
+        <div class="user-name">—</div>
+        <div class="user-role">—</div>
+      </div>
+      <button class="user-logout" title="Déconnexion">⇥</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">Formulaire REP</div>
+      <button class="btn btn-secondary btn-sm" onclick="window.location.href='dashboard.html'">
+        ← Retour au parc
+      </button>
+      <button class="btn btn-secondary btn-sm" onclick="releaseVehicle()">
+        🔓 Libérer
+      </button>
+      <button class="btn btn-secondary btn-sm" onclick="saveRep()">
+        💾 Enregistrer
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="closeVehicle()">
+        ✅ Clôturer le dossier
+      </button>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Vehicle Header -->
+      <div class="vehicle-header">
+        <div>
+          <div class="vh-immat">—</div>
+          <div class="vh-brand">—</div>
+        </div>
+        <div class="vh-meta">
+          <div class="vh-meta-item">
+            <label>N° Ligne</label>
+            <span data-vh="num">—</span>
+          </div>
+          <div class="vh-meta-item">
+            <label>VIN</label>
+            <span data-vh="vin">—</span>
+          </div>
+          <div class="vh-meta-item">
+            <label>1ère MEC</label>
+            <span data-vh="mec">—</span>
+          </div>
+          <div class="vh-meta-item">
+            <label>Kilométrage</label>
+            <span data-vh="km">—</span>
+          </div>
+          <div class="vh-meta-item">
+            <label>Usage</label>
+            <span data-vh="usage">—</span>
+          </div>
+        </div>
+        <div class="vh-status">
+          <div class="vh-status-badge"></div>
+          <div class="vh-lock"></div>
+        </div>
+      </div>
+
+      <!-- Qualification -->
+      <div class="qual-selector">
+        <span class="qual-label">Qualification :</span>
+        <button class="qual-btn" data-status="none">⚪ Pas encore vu</button>
+        <button class="qual-btn active-grele" data-status="grele">🟢 Grêlé (Oui)</button>
+        <button class="qual-btn" data-status="non">🔴 Non grêlé (Non)</button>
+      </div>
+
+      <!-- REP Form -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 Données d'expertise — Formulaire REP</div>
+        </div>
+        <div class="card-body">
+
+          <!-- SECTION 1: Taux -->
+          <div class="form-section-title">
+            <div class="fst-accent"></div>
+            Taux Réparateur (€/h)
+          </div>
+          <div class="rate-grid">
+            <div class="form-group">
+              <label class="form-label">Taux Débosselage</label>
+              <input type="number" id="tauxDeb" class="form-control" placeholder="€/h" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Taux MO1</label>
+              <input type="number" id="tauxMO1" class="form-control" placeholder="€/h" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Taux MO2</label>
+              <input type="number" id="tauxMO2" class="form-control" placeholder="€/h" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Taux MO Peinture</label>
+              <input type="number" id="tauxMOP" class="form-control" placeholder="€/h" step="0.01">
+            </div>
+          </div>
+
+          <!-- SECTION 2: Montants -->
+          <div class="form-section-title" style="margin-top:20px">
+            <div class="fst-accent"></div>
+            Montants
+          </div>
+          <div class="rep-grid">
+            <div class="form-group">
+              <label class="form-label">Montant Débosselage (€ HT) — Si Grêle</label>
+              <input type="number" id="montantDeb" class="form-control" placeholder="AO DSP retenu" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Coût Pièces (€ HT)</label>
+              <input type="number" id="coutPieces" class="form-control" placeholder="Total pièces à remplacer" step="0.01">
+            </div>
+            <div class="form-group rep-full">
+              <label class="form-label">Détail des pièces</label>
+              <textarea id="detailPieces" class="form-control" rows="2" placeholder="Description succincte des pièces à remplacer..."></textarea>
+            </div>
+          </div>
+
+          <!-- SECTION 3: Main d'oeuvre -->
+          <div class="form-section-title" style="margin-top:20px">
+            <div class="fst-accent"></div>
+            Main d'œuvre (heures)
+          </div>
+          <div class="rate-grid">
+            <div class="form-group">
+              <label class="form-label">MO1</label>
+              <input type="number" id="mo1" class="form-control" placeholder="0.0h" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">MO2</label>
+              <input type="number" id="mo2" class="form-control" placeholder="0.0h" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">MO3</label>
+              <input type="number" id="mo3" class="form-control" placeholder="0.0h" step="0.1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">MO Peinture</label>
+              <input type="number" id="mop" class="form-control" placeholder="0.0h" step="0.1">
+            </div>
+          </div>
+
+          <!-- SECTION 4: Remises -->
+          <div class="form-section-title" style="margin-top:20px">
+            <div class="fst-accent"></div>
+            Remises &amp; Ingrédients
+          </div>
+          <div class="rep-grid">
+            <div class="form-group">
+              <label class="form-label">Ingrédient Peinture (h)</label>
+              <input type="number" id="ing" class="form-control" placeholder="0.0h" step="0.1">
+            </div>
+            <div></div>
+            <div class="form-group">
+              <label class="form-label">Remise sur Débosselage (%)</label>
+              <input type="number" id="remiseDeb" class="form-control" placeholder="%" step="0.5" min="0" max="100">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Remise sur Pièces / MO (%)</label>
+              <input type="number" id="remisePieces" class="form-control" placeholder="%" step="0.5" min="0" max="100">
+            </div>
+          </div>
+
+          <!-- MONTANT RÉPARATION -->
+          <div class="montant-card">
+            <div>
+              <div class="montant-label">Montant Réparation</div>
+              <div class="montant-value">0,00 €</div>
+              <div class="montant-sub">Calculé automatiquement · Lecture seule</div>
+            </div>
+            <div class="montant-formula">
+              =(Deb×(1-RemDeb)) +<br>
+              ((Pièces+MO1×TxMO1+MO2×TxMO2+<br>
+              MO3×TxMO3+MOP×TxMOP)×(1-RemPièces))
+            </div>
+          </div>
+
+          <!-- SECTION 5: Facturation -->
+          <div class="form-section-title" style="margin-top:28px">
+            <div class="fst-accent"></div>
+            Facturation
+          </div>
+          <div class="fact-grid">
+            <!-- Partenaire -->
+            <div class="fact-card">
+              <div class="fact-card-title">🤝 Débosseleur Partenaire</div>
+              <div class="form-group">
+                <label class="form-label">Montant Facture (€ HT)</label>
+                <input type="number" id="factPartMontant" class="form-control" placeholder="0.00" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Numéro de Facture</label>
+                <input type="text" id="factPartNum" class="form-control" placeholder="ex: FAC-2025-0001">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date Facture</label>
+                <input type="text" id="factPartDate" class="form-control" placeholder="JJ/MM/AAAA">
+              </div>
+            </div>
+            <!-- Assuré -->
+            <div class="fact-card">
+              <div class="fact-card-title">👤 Débosseleur Assuré / Hors Partenaire</div>
+              <div class="form-group">
+                <label class="form-label">Montant Facture (€ HT)</label>
+                <input type="number" id="factAssureMontant" class="form-control" placeholder="0.00" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Numéro de Facture</label>
+                <input type="text" id="factAssureNum" class="form-control" placeholder="ex: FAC-2025-0001">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date Facture</label>
+                <input type="text" id="factAssureDate" class="form-control" placeholder="JJ/MM/AAAA">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 6: Compléments -->
+          <div class="form-section-title" style="margin-top:28px">
+            <div class="fst-accent"></div>
+            Informations complémentaires
+          </div>
+          <div class="rep-grid">
+            <div class="form-group rep-full">
+              <label class="form-label">Commentaires</label>
+              <textarea id="commentaires" class="form-control" rows="2" placeholder="Commentaires libres..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Valeur d'achat (€ HT)</label>
+              <input type="number" id="valeurAchat" class="form-control" placeholder="0.00" step="0.01">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Indemnité de dépréciation</label>
+              <input type="number" id="depreciation" class="form-control" placeholder="Suivant contrat" step="0.01">
+            </div>
+          </div>
+
+        </div><!-- /card-body -->
+      </div><!-- /card -->
+
+      <!-- Sticky bottom actions -->
+      <div class="rep-action-bar">
+        <span style="font-size:12px;color:var(--text-muted)">
+          💾 Auto-sauvegarde active · Données locales à la démo
+        </span>
+        <div style="margin-left:auto;display:flex;gap:10px">
+          <button class="btn btn-secondary" onclick="releaseVehicle()">🔓 Libérer le véhicule</button>
+          <button class="btn btn-secondary" onclick="saveRep()">💾 Enregistrer</button>
+          <button class="btn btn-primary" onclick="closeVehicle()">✅ Clôturer le dossier</button>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/rep.js"></script>
+</body>
+</html>

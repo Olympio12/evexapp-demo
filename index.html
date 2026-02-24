@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EVEXApp - Connexion</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-body">
+  <div class="login-bg-grid"></div>
+
+  <div class="login-container">
+    <!-- Left Panel -->
+    <div class="login-left">
+      <div>
+        <div class="login-logo-brand">BCA Expertise</div>
+        <div class="login-logo-app">EVEX</div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="login-right">
+      <h2>Connexion</h2>
+      <p class="login-sub">Accédez à votre espace</p>
+
+      <!-- Demo Accounts -->
+      <div class="login-demo-accounts">
+        <div class="demo-title">Comptes demo</div>
+        <div class="demo-account" onclick="fillDemo('admin@bca.fr','admin')">
+          <div>
+            <div class="demo-account-role">Administrateur</div>
+            <div class="demo-account-creds">admin@bca.fr ; admin</div>
+          </div>
+          <span class="demo-use-btn">Utiliser</span>
+        </div>
+        <div class="demo-account" onclick="fillDemo('expert@bca.fr','expert')">
+          <div>
+            <div class="demo-account-role">Expert</div>
+            <div class="demo-account-creds">expert@bca.fr · expert</div>
+          </div>
+          <span class="demo-use-btn">Utiliser</span>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <div class="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Adresse email</label>
+          <input type="email" id="email" class="form-control" placeholder="votre@email.fr" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Mot de passe</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" autocomplete="current-password">
+        </div>
+
+        <div class="login-error" id="login-error">
+          ❌ Email ou mot de passe incorrect.
+        </div>
+
+        <button class="login-btn" onclick="doLogin()">
+          Se connecter →
+        </button>
+      </div>
+
+      <div class="login-footer">
+        EVEXApp · BCA Expertise
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (EVEX_AUTH.getSession()) {
+      const s = EVEX_AUTH.getSession();
+      window.location.href = s.role === 'admin' ? 'admin.html' : 'dashboard.html';
+    }
+
+    function fillDemo(email, pwd) {
+      document.querySelector('#email').value = email;
+      document.querySelector('#password').value = pwd;
+      document.querySelector('#login-error').style.display = 'none';
+    }
+
+    function doLogin() {
+      const email = document.querySelector('#email').value.trim();
+      const password = document.querySelector('#password').value;
+      const errEl = document.querySelector('#login-error');
+
+      if (!email || !password) {
+        errEl.textContent = '⚠️ Veuillez saisir votre email et mot de passe.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      const result = EVEX_AUTH.login(email, password);
+      if (result.success) {
+        TOAST.show('✅ Connexion réussie, redirection...', 'success', 1500);
+        setTimeout(() => {
+          window.location.href = result.session.role === 'admin' ? 'admin.html' : 'dashboard.html';
+        }, 800);
+      } else {
+        errEl.textContent = '❌ ' + result.error;
+        errEl.style.display = 'block';
+        TOAST.show(result.error, 'error');
+      }
+    }
+
+    // Enter key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doLogin();
+    });
+  </script>
+</body>
+</html>
